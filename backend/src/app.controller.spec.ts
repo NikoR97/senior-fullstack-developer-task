@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -8,15 +7,29 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
     }).compile();
 
     appController = app.get<AppController>(AppController);
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return user data', () => {
+      const mockRequest = {
+        user: {
+          id: 1,
+          username: 'test_user',
+          roles: ['User'],
+          status: 'Enabled',
+        },
+      };
+
+      const result = appController.getHello(mockRequest as any);
+      expect(result).toEqual({
+        id: 1,
+        username: 'test_user',
+        roles: ['User'],
+        status: 'Enabled',
+      });
     });
   });
 });

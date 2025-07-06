@@ -1,46 +1,61 @@
 <template>
-	<div>
-		<Navbar v-if="showNavbar" />
-		<router-view />
-		<button v-if="showNavbar" @click="handleLogout">Logout</button>
-	</div>
+  <div id="app">
+    <Navbar v-if="showNavbar" />
+    <main class="main-content">
+      <router-view />
+    </main>
+  </div>
 </template>
 
 <script setup>
-import { computed } from "vue"
-import { useRoute, useRouter } from "vue-router"
-import Navbar from "./components/Navbar.vue"
+import {computed} from "vue";
+import {useRoute} from "vue-router";
+import {useStore} from "vuex";
+import Navbar from "./components/Navbar.vue";
 
-const route = useRoute()
-const router = useRouter()
-const showNavbar = computed(() => route.path !== "/")
+const route = useRoute();
+const store = useStore();
 
-const handleLogout = () => {
-	router.push("/")
-}
+const showNavbar = computed(
+  () => route.path !== "/" && store.getters.isLoggedIn
+);
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
 #app {
-	font-family: Avenir, Helvetica, Arial, sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-align: center;
-	color: #2c3e50;
+  min-height: 100vh;
+}
+
+.main-content {
+  padding: 2rem;
+}
+
+/* Simple form styling */
+input,
+button,
+select {
+  font-family: inherit;
 }
 
 button {
-	padding: 0.5rem 1rem;
-	font-size: 1rem;
-	background-color: #dc3545;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	margin-top: 1rem;
+  cursor: pointer;
 }
 
-button:hover {
-	background-color: #c82333;
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
 }
 </style>
